@@ -2,6 +2,7 @@ package dev.frizio.web.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import dev.frizio.web.demo.converters.UserConverter;
 import dev.frizio.web.demo.dtos.UserDTO;
 import dev.frizio.web.demo.entities.User;
+import dev.frizio.web.demo.exceptions.UserNotFoundException;
 import dev.frizio.web.demo.repositories.UserRepository;
 import dev.frizio.web.demo.services.UserService;
 import dev.frizio.web.demo.services.UserServiceImpl;
@@ -55,6 +57,14 @@ public class UserServiceTest {
         assertEquals(user.getSurname(), surnameAndName[0]);
         assertEquals(user.getName(), surnameAndName[1]);
         assertEquals(user.getAddress(), userDTO.getAddress());
+    }
+
+    @Test
+    public void findByIdUnSuccess() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+    
+        UserNotFoundException exp = assertThrows(UserNotFoundException.class, () -> userService.findById(1L));
+        assertEquals("User with id 1 not found!", exp.getMessage());
     }
 
 }
