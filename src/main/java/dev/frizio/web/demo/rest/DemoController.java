@@ -10,7 +10,10 @@ public class DemoController {
     
     @GetMapping("/demo")
     public String demo() {
-        return "Time on server is " + LocalDateTime.now();
+        String out = "";
+        out+=  "Time on server is " + LocalDateTime.now() + "\n";
+        out += "Java version on the server machine: " + System.getProperty("java.version") + "\n";
+        return out;
     }
     
 }
